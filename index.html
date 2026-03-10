@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fi Inbox</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Messina Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      background: #f4f4f4;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px;
+      letter-spacing: -0.4px;
+    }
+
+    .inbox {
+      background: #ffffff;
+      width: 100%;
+      max-width: 390px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px 20px 0;
+      gap: 12px;
+    }
+
+    .close-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #000000;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .close-btn:hover { background: #2c2c2c; }
+
+    .header-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: -1.1px;
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      padding: 16px 20px 0;
+      gap: 0;
+      border-bottom: 1.5px solid #e0e0e0;
+    }
+
+    .tab-btn {
+      position: relative;
+      padding: 8px 18px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      color: #2c2c2c;
+      transition: color 0.2s;
+      letter-spacing: -0.4px;
+      font-family: 'Messina Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -1.5px;
+      left: 0;
+      right: 0;
+      height: 2.5px;
+      background: #fffa01;
+      border-radius: 2px 2px 0 0;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .tab-btn.active {
+      color: #000000;
+    }
+    .tab-btn.active::after { opacity: 1; }
+    .tab-btn:hover:not(.active) { color: #000000; }
+
+    /* Tab panels */
+    .tab-panel { display: none; padding: 12px 16px 24px; }
+    .tab-panel.active { display: block; }
+
+    /* Cards */
+    .card {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 12px;
+      border-radius: 14px;
+      margin-bottom: 8px;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .card:hover { background: #f4f4f4; }
+    .card:last-child { margin-bottom: 0; }
+
+    .icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .icon-amber  { background: #fff9e0; }
+    .icon-red    { background: #fff0f0; }
+    .icon-purple { background: #f4f4f4; }
+    .icon-blue   { background: #f0f4ff; }
+    .icon-green  { background: #f0fff4; }
+
+    .card-body { flex: 1; min-width: 0; }
+
+    .card-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #000000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: -0.3px;
+    }
+
+    .card-time {
+      font-size: 12px;
+      color: #a6a6a6;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-text {
+      font-size: 13px;
+      color: #2c2c2c;
+      line-height: 1.45;
+      letter-spacing: -0.2px;
+    }
+
+    /* Unread dot */
+    .unread-dot {
+      position: absolute;
+      top: 14px;
+      right: 12px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fffa01;
+    }
+
+    /* Divider between cards */
+    .card + .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 70px;
+      right: 12px;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
+    /* Empty state */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 20px;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .empty-state svg { opacity: 0.45; }
+
+    .empty-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2c2c2c;
+    }
+
+    .empty-sub {
+      font-size: 13px;
+      color: #a6a6a6;
+      max-width: 220px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="inbox">
+
+  <!-- Header -->
+  <div class="header">
+    <button class="close-btn" onclick="this.closest('.inbox').style.display='none'" aria-label="Close">&#x2715;</button>
+    <span class="header-title">My Inbox</span>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active" role="tab" aria-selected="true"  data-tab="alerts">Alerts</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" data-tab="tips">Tips</button>
+    <button class="tab-btn"        role="tab" aria-selected="false" data-tab="offers">Offers</button>
+  </div>
+
+  <!-- Alerts panel -->
+  <div id="panel-alerts" class="tab-panel active" role="tabpanel">
+
+    <div class="card">
+      <div class="unread-dot"></div>
+      <div class="icon-circle icon-amber">⚡</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-title">Battery Low</span>
+          <span class="card-time">5m ago</span>
+        </div>
+        <p class="card-text">Gus's Fi collar is at 12% — plug in soon to keep tracking.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="unread-dot"></div>
+      <div class="icon-circle icon-red">📍</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-title">Safe Zone Alert</span>
+          <span class="card-time">1h ago</span>
+        </div>
+        <p class="card-text">Gus left the Home safe zone at 2:43 PM today.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tips panel -->
+  <div id="panel-tips" class="tab-panel" role="tabpanel">
+
+    <div class="card">
+      <div class="unread-dot"></div>
+      <div class="icon-circle icon-purple">🐾</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-title">Activity Drop Detected</span>
+          <span class="card-time">Yesterday</span>
+        </div>
+        <p class="card-text">Gus was less active than usual this week. Try a longer walk!</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="unread-dot"></div>
+      <div class="icon-circle icon-blue">💤</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-title">Enable Sleep Tracking</span>
+          <span class="card-time">2d ago</span>
+        </div>
+        <p class="card-text">Get nightly health summaries by turning on sleep mode.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Offers panel -->
+  <div id="panel-offers" class="tab-panel" role="tabpanel">
+
+    <div class="card">
+      <div class="unread-dot"></div>
+      <div class="icon-circle icon-green">⭐</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-title">20% Off Fi Premium</span>
+          <span class="card-time">3d ago</span>
+        </div>
+        <p class="card-text">Upgrade for advanced GPS history and live tracking.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon-circle icon-purple">🎁</div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-title">Refer a Friend</span>
+          <span class="card-time">1w ago</span>
+        </div>
+        <p class="card-text">Share Fi with a friend and you both earn $20 in credits.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Empty state (hidden — shown when a tab has no messages) -->
+  <div id="empty-state" class="empty-state" style="display:none;" aria-live="polite">
+    <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="20" width="56" height="40" rx="6" fill="#e0e0e0"/>
+      <path d="M8 26l28 20 28-20" stroke="#a6a6a6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="24" y="10" width="24" height="16" rx="4" fill="#a6a6a6"/>
+      <line x1="30" y1="17" x2="42" y2="17" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      <line x1="30" y1="21" x2="38" y2="21" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <p class="empty-title">Done and done!</p>
+    <p class="empty-sub">You have no new messages.</p>
+  </div>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      panels.forEach(p => p.classList.remove('active'));
+
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+
+      const panelId = 'panel-' + tab.dataset.tab;
+      const panel = document.getElementById(panelId);
+      panel.classList.add('active');
+
+      // Show empty state if panel has no cards
+      const empty = document.getElementById('empty-state');
+      const hasCards = panel.querySelector('.card') !== null;
+      empty.style.display = hasCards ? 'none' : 'flex';
+    });
+  });
+</script>
+
+</body>
+</html>
