@@ -194,6 +194,73 @@
       background: #e0e0e0;
     }
 
+    /* Card expansion */
+    .card-details {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.28s ease, opacity 0.2s ease;
+    }
+    .card.expanded .card-details {
+      max-height: 160px;
+      opacity: 1;
+    }
+    .card.expanded {
+      background: transparent;
+    }
+
+    .card-full-text {
+      font-size: 13px;
+      color: #2c2c2c;
+      line-height: 1.45;
+      letter-spacing: -0.2px;
+      margin-top: 6px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn-dismiss {
+      border: 1.5px solid #e0e0e0;
+      background: transparent;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: -0.2px;
+      transition: background 0.15s;
+    }
+    .btn-dismiss:hover { background: #f4f4f4; }
+
+    .btn-cta {
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: -0.2px;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover { background: #2c2c2c; }
+
+    .expand-chevron {
+      display: block;
+      margin-top: 6px;
+      color: #a6a6a6;
+      transition: transform 0.22s ease;
+      line-height: 1;
+    }
+    .card.expanded .expand-chevron {
+      transform: rotate(180deg);
+    }
+
     /* Empty state */
     .empty-state {
       display: flex;
@@ -249,6 +316,16 @@
           <span class="card-time">5m ago</span>
         </div>
         <p class="card-text">Gus's Fi collar is at 12% — plug in soon to keep tracking.</p>
+        <span class="expand-chevron">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#a6a6a6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="card-details">
+          <p class="card-full-text">Your collar typically lasts 3–4 days. Connect to any USB-C charger to restore.</p>
+          <div class="card-actions">
+            <button class="btn-dismiss">Dismiss</button>
+            <button class="btn-cta">Charge Guide</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -261,6 +338,16 @@
           <span class="card-time">1h ago</span>
         </div>
         <p class="card-text">Gus left the Home safe zone at 2:43 PM today.</p>
+        <span class="expand-chevron">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#a6a6a6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="card-details">
+          <p class="card-full-text">Gus returned to the Home zone at 4:12 PM. Check the map for his full route.</p>
+          <div class="card-actions">
+            <button class="btn-dismiss">Dismiss</button>
+            <button class="btn-cta">View Map</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -278,6 +365,16 @@
           <span class="card-time">Yesterday</span>
         </div>
         <p class="card-text">Gus was less active than usual this week. Try a longer walk!</p>
+        <span class="expand-chevron">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#a6a6a6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="card-details">
+          <p class="card-full-text">Gus averaged 2,400 steps this week vs. his usual 4,100. A short morning walk can help.</p>
+          <div class="card-actions">
+            <button class="btn-dismiss">Dismiss</button>
+            <button class="btn-cta">Get Tips</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -290,6 +387,16 @@
           <span class="card-time">2d ago</span>
         </div>
         <p class="card-text">Get nightly health summaries by turning on sleep mode.</p>
+        <span class="expand-chevron">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#a6a6a6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="card-details">
+          <p class="card-full-text">Sleep mode detects rest quality, nightly duration, and restlessness over time.</p>
+          <div class="card-actions">
+            <button class="btn-dismiss">Dismiss</button>
+            <button class="btn-cta">Enable Now</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -307,6 +414,16 @@
           <span class="card-time">3d ago</span>
         </div>
         <p class="card-text">Upgrade for advanced GPS history and live tracking.</p>
+        <span class="expand-chevron">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#a6a6a6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="card-details">
+          <p class="card-full-text">Premium includes live GPS tracking, 30-day location history, and escape alerts.</p>
+          <div class="card-actions">
+            <button class="btn-dismiss">Dismiss</button>
+            <button class="btn-cta">Upgrade</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -318,6 +435,16 @@
           <span class="card-time">1w ago</span>
         </div>
         <p class="card-text">Share Fi with a friend and you both earn $20 in credits.</p>
+        <span class="expand-chevron">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#a6a6a6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="card-details">
+          <p class="card-full-text">Your unique link earns both of you $20 in Fi credits once your friend activates.</p>
+          <div class="card-actions">
+            <button class="btn-dismiss">Dismiss</button>
+            <button class="btn-cta">Share Link</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -358,6 +485,21 @@
       const empty = document.getElementById('empty-state');
       const hasCards = panel.querySelector('.card') !== null;
       empty.style.display = hasCards ? 'none' : 'flex';
+    });
+  });
+
+  // Card expansion
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const isExpanded = card.classList.toggle('expanded');
+      if (isExpanded) {
+        card.querySelector('.unread-dot')?.remove();
+      }
+    });
+
+    // Prevent action button clicks from toggling the card
+    card.querySelectorAll('.card-actions button').forEach(btn => {
+      btn.addEventListener('click', e => e.stopPropagation());
     });
   });
 </script>
